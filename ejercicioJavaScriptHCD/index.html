@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/global.css" type="text/css">
+    <title>Ejercicio JavaScript</title>
+</head>
+<body>
+    <header>
+        <h1>
+            <p>Juego Luces - Hugo del Castillo Deus
+            </p>
+        </h1>
+    </header>
+    <main>
+        <section>
+            <p id="intentos">Numero de Intentos : 0</p>
+            <p id="tmpTrascurrido">Tiempo trancurrido: </p>
+            <p id="target"></p>
+        </section>
+        <section>
+            <table>
+                <tbody>
+                    <tr>
+                        <td id="img_1_1"></td>
+                        <td id="img_1_2"></td>
+                        <td id="img_1_3"></td>
+                        <td id="img_1_4"></td>
+                        <td id="img_1_5"></td>
+                        <td id="img_1_6"></td>
+                    </tr>
+                    <tr>
+                        <td id="img_2_1"></td>
+                        <td id="img_2_2"></td>
+                        <td id="img_2_3"></td>
+                        <td id="img_2_4"></td>
+                        <td id="img_2_5"></td>
+                        <td id="img_2_6"></td>
+                    </tr>
+                    <tr>
+                        <td id="img_3_1"></td>
+                        <td id="img_3_2"></td>
+                        <td id="img_3_3"></td>
+                        <td id="img_3_4"></td>
+                        <td id="img_3_5"></td>
+                        <td id="img_3_6"></td>
+                    </tr>
+                    <tr>
+                        <td id="img_4_1"></td>
+                        <td id="img_4_2"></td>
+                        <td id="img_4_3"></td>
+                        <td id="img_4_4"></td>
+                        <td id="img_4_5"></td>
+                        <td id="img_4_6"></td>
+                    </tr>
+                    <tr>
+                        <td id="img_5_1"></td>
+                        <td id="img_5_2"></td>
+                        <td id="img_5_3"></td>
+                        <td id="img_5_4"></td>
+                        <td id="img_5_5"></td>
+                        <td id="img_5_6"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <form action="">
+                <fieldset>
+                    <legend>Nivel de Dificultad</legend>
+                    <input type="radio" name="dificultad" id="facil"> Facil 
+                    <input type="radio" name="dificultad" id="medio"> Medio
+                    <input type="radio" name="dificultad" id="dificil"> Dificil
+                    <input type="radio" name="dificultad" id="personalizado"> Personalizado
+                </fieldset>
+                <fieldset>
+                    <legend>Numero de Luces</legend>
+                    Filas <input type="number" id="filas"> 
+                    Columnas <input type="number" id="columnas">
+                    Luces Encendidas <input type="number" id="lucesEncendidas">
+                </fieldset>
+                <button type="button" value="seleccionar" id="btnSeleccionar">Seleccionar</button>
+            </form>
+        </section>
+    </main>
+<script src="./src/global.js"></script>
+</body>
+</html>
