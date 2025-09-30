@@ -1,33 +1,61 @@
-const lucesEncendidas = document.getElementById('lucesEncendidas');
-const personalizado = document.getElementById('personalizado');
+const columnas = document.getElementById('columnas');
+const filas = document.getElementById('filas');
+const luces = document.getElementById('luces');
 const dificultadFacil = document.getElementById('facil');
 const dificultadMedio = document.getElementById('medio');
 const dificultadDificil = document.getElementById('dificil');
 const dificultadPersonalizado = document.getElementById('personalizado');
 const btnSeleccionar = document.getElementById('btnSeleccionar');
 const intentos = document.getElementById('intentos');
-const matrizTabla = new Array(fila);
 
 let contadorIntentos = 0;
 
+const juego = () => {
+    let matrizTabla = new Array();
+    let columna = parseInt(document.getElementById('columnas').value);
+    let fila = parseInt(document.getElementById('filas').value);
+    let luces = parseInt(document.getElementById('luces').value);
+    
+    generarTablero(matrizTabla,columna,fila,luces);
+}
 
-const contruirTablero = () => {
-    let columna = document.getElementById('columnas');
-    let fila = document.getElementById('filas');
-    let luces = document.getElementById('luces');
+const generarTablero = (matrizTabla,columna,fila,luces) => {
 
     for (let i = 0; i < fila; i++) {
         matrizTabla[i] = new Array(columna).fill(0);
     }
-    generarLuces(matrizTabla, luces);
+    generarLuces(matrizTabla, luces, columna, fila);
+    contruirTableroHTML(matrizTabla, luces, columna, fila);
 }
 
-const generarLuces = (matriz,luces) =>{
-    Math.floor(Math.random() * 2)
+const generarLuces = (matriz,luces,columna,fila) => {
+    let luz = 0;
+    while(luz < luces) {
+        let row = getRandomArbitrary(0, fila - 1); 
+        let col = getRandomArbitrary(0, columna - 1); 
+        if(matriz[row][col] == 0){
+            matriz[row][col] = 1;
+            luz++;
+        }
+    }
+    return matriz;
 }
 
-const juego = () => {
-    contruirTablero();
+const contruirTableroHTML = (matrizTabla, luces, columnas, filas) => {
+
+    const tabla = document.getElementById("mainTable");
+    tabla.innerHTML = "";
+for (let i = 0; i < filas; i++) {
+    const fila = document.createElement("tr"); // Crea un <tr>
+
+    for (let j = 0; j < columnas; j++) {
+        const celda = document.createElement("td"); // Crea un <td>
+        fila.appendChild(celda); // Agrega el <td> a la fila
+    }
+
+    tabla.appendChild(fila); // Agrega la fila a la tabla
+}
+
 }
 
 function setDificultad(filasVal = undefined, columnasVal = undefined, lucesVal = undefined, disabled = true) {
@@ -35,8 +63,8 @@ function setDificultad(filasVal = undefined, columnasVal = undefined, lucesVal =
     filas.value = filasVal;
     columnas.disabled = disabled;
     columnas.value = columnasVal;
-    lucesEncendidas.disabled = disabled;
-    lucesEncendidas.value = lucesVal;
+    luces.disabled = disabled;
+    luces.value = lucesVal;
 }
 
 dificultadFacil.addEventListener('click', () => setDificultad(5, 6, 10));
@@ -49,3 +77,7 @@ btnSeleccionar.addEventListener('click',(event) => {
     event.preventDefault();
     juego();
 })
+
+function getRandomArbitrary(min, max) {
+  return parseInt(Math.random() * (max - min) + min);
+}
