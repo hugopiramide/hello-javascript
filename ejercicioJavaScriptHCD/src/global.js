@@ -1,5 +1,3 @@
-const columnas = document.getElementById('columnas');
-const filas = document.getElementById('filas');
 const lucesEncendidas = document.getElementById('lucesEncendidas');
 const personalizado = document.getElementById('personalizado');
 const dificultadFacil = document.getElementById('facil');
@@ -8,27 +6,28 @@ const dificultadDificil = document.getElementById('dificil');
 const dificultadPersonalizado = document.getElementById('personalizado');
 const btnSeleccionar = document.getElementById('btnSeleccionar');
 const intentos = document.getElementById('intentos');
-const EMPTY = 0;
+const matrizTabla = new Array(fila);
 
-let tabla = [[EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY],
-            [EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY],
-            [EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY],
-            [EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY],
-            [EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY]];  
 let contadorIntentos = 0;
 
-const modoJuego = () => {
-tabla = [[EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY],
-            [EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY],
-            [EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY],
-            [EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY],
-            [EMPTY,EMPTY,EMPTY,EMPTY,EMPTY,EMPTY]];
- 
+
+const contruirTablero = () => {
+    let columna = document.getElementById('columnas');
+    let fila = document.getElementById('filas');
+    let luces = document.getElementById('luces');
+
+    for (let i = 0; i < fila; i++) {
+        matrizTabla[i] = new Array(columna).fill(0);
+    }
+    generarLuces(matrizTabla, luces);
 }
 
-const clickTd = event => {
-const [, row, column] = event.currentTarget.id.split('_');
+const generarLuces = (matriz,luces) =>{
+    Math.floor(Math.random() * 2)
+}
 
+const juego = () => {
+    contruirTablero();
 }
 
 function setDificultad(filasVal = undefined, columnasVal = undefined, lucesVal = undefined, disabled = true) {
@@ -48,5 +47,5 @@ dificultadPersonalizado.addEventListener('click', () => setDificultad(0, 0, 0, f
 
 btnSeleccionar.addEventListener('click',(event) => {
     event.preventDefault();
-    modoJuego();
+    juego();
 })
