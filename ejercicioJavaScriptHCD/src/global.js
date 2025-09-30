@@ -6,8 +6,12 @@ const dificultadMedio = document.getElementById('medio');
 const dificultadDificil = document.getElementById('dificil');
 const dificultadPersonalizado = document.getElementById('personalizado');
 const btnSeleccionar = document.getElementById('btnSeleccionar');
+const tmpTranscurrido = document.getElementById('tmpTranscurrido');
 const intentos = document.getElementById('intentos');
 
+let horas = 0, minutos = 0, segundos = 0;
+let intervalo = null;
+let corriendo = false;
 let contadorIntentos = 0;
 
 const juego = () => {
@@ -85,3 +89,30 @@ btnSeleccionar.addEventListener('click',(event) => {
 function getRandomArbitrary(min, max) {
   return parseInt(Math.random() * (max - min) + min);
 }
+
+function actualizarDisplay() {
+    let h = horas < 10 ? "0" + horas : horas;
+    let m = minutos < 10 ? "0" + minutos : minutos;
+    let s = segundos < 10 ? "0" + segundos : segundos;
+    tmpTranscurrido.innerText = `${h}:${m}:${s}`;
+}
+
+function contar() {
+    segundos++;
+    if (segundos >= 60) {
+    segundos = 0;
+    minutos++;
+    }
+    if (minutos >= 60) {
+    minutos = 0;
+    horas++;
+    }
+    actualizarDisplay();
+}
+
+btnSeleccionar.addEventListener("click", () => {
+    if (!corriendo) {
+    intervalo = setInterval(contar, 1000);
+    corriendo = true;
+    }
+});
