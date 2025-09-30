@@ -14,13 +14,27 @@ let intervalo = null;
 let corriendo = false;
 let contadorIntentos = 0;
 
+dificultadFacil.addEventListener('click', () => setDificultad(5, 6, 10));
+dificultadMedio.addEventListener('click', () => setDificultad(6, 6, 6));
+dificultadDificil.addEventListener('click', () => setDificultad(10, 10, 20));
+dificultadPersonalizado.addEventListener('click', () => setDificultad(0, 0, 0, false));
+
+btnSeleccionar.addEventListener('click',(event) => {
+    event.preventDefault();
+    juego();
+})
+
 const juego = () => {
     const matrizTabla = new Array();
+    
     let columna = parseInt(document.getElementById('columnas').value);
     let fila = parseInt(document.getElementById('filas').value);
     let luces = parseInt(document.getElementById('luces').value);
     
+    if(columna * fila >= luces){
     generarTablero(matrizTabla,columna,fila,luces);
+    generarCronometro();
+    }
 }
 
 const generarTablero = (matrizTabla,columna,fila,luces) => {
@@ -75,27 +89,17 @@ function setDificultad(filasVal = undefined, columnasVal = undefined, lucesVal =
     luces.value = lucesVal;
 }
 
-dificultadFacil.addEventListener('click', () => setDificultad(5, 6, 10));
-dificultadMedio.addEventListener('click', () => setDificultad(6, 6, 6));
-dificultadDificil.addEventListener('click', () => setDificultad(10, 10, 20));
-dificultadPersonalizado.addEventListener('click', () => setDificultad(0, 0, 0, false));
-
-
-btnSeleccionar.addEventListener('click',(event) => {
-    event.preventDefault();
-    juego();
-})
-
 function getRandomArbitrary(min, max) {
   return parseInt(Math.random() * (max - min) + min);
 }
+
 
 function actualizarDisplay() {
     let h = horas < 10 ? "0" + horas : horas;
     let m = minutos < 10 ? "0" + minutos : minutos;
     let s = segundos < 10 ? "0" + segundos : segundos;
     tmpTranscurrido.innerText = `${h}:${m}:${s}`;
-}
+;}
 
 function contar() {
     segundos++;
@@ -110,9 +114,20 @@ function contar() {
     actualizarDisplay();
 }
 
-btnSeleccionar.addEventListener("click", () => {
-    if (!corriendo) {
+function generarCronometro(){
+    if(corriendo == true){
+        clearInterval(intervalo)
+        horas = 0;
+        minutos = 0;
+        segundos = 0;
+        corriendo = false;
+    }
     intervalo = setInterval(contar, 1000);
     corriendo = true;
-    }
-});
+}
+
+function generarContadorIntentos(){
+    intentos.innerText = '';
+    contadorIntentos++;
+    intentos.innerText = contadorIntentos;
+}
