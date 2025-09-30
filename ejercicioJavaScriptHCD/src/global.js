@@ -11,7 +11,7 @@ const intentos = document.getElementById('intentos');
 let contadorIntentos = 0;
 
 const juego = () => {
-    let matrizTabla = new Array();
+    const matrizTabla = new Array();
     let columna = parseInt(document.getElementById('columnas').value);
     let fila = parseInt(document.getElementById('filas').value);
     let luces = parseInt(document.getElementById('luces').value);
@@ -25,35 +25,39 @@ const generarTablero = (matrizTabla,columna,fila,luces) => {
         matrizTabla[i] = new Array(columna).fill(0);
     }
     generarLuces(matrizTabla, luces, columna, fila);
-    contruirTableroHTML(matrizTabla, luces, columna, fila);
 }
 
 const generarLuces = (matriz,luces,columna,fila) => {
     let luz = 0;
     while(luz < luces) {
-        let row = getRandomArbitrary(0, fila - 1); 
-        let col = getRandomArbitrary(0, columna - 1); 
+        let row = getRandomArbitrary(0, fila); 
+        let col = getRandomArbitrary(0, columna); 
         if(matriz[row][col] == 0){
             matriz[row][col] = 1;
             luz++;
         }
     }
-    return matriz;
+    contruirTableroHTML(matriz, luces, columna, fila);
 }
 
 const contruirTableroHTML = (matrizTabla, luces, columnas, filas) => {
 
     const tabla = document.getElementById("mainTable");
     tabla.innerHTML = "";
+    console.log(matrizTabla);
 for (let i = 0; i < filas; i++) {
-    const fila = document.createElement("tr"); // Crea un <tr>
-
+    const fila = document.createElement("tr");
     for (let j = 0; j < columnas; j++) {
-        const celda = document.createElement("td"); // Crea un <td>
-        fila.appendChild(celda); // Agrega el <td> a la fila
+        const celda = document.createElement("td");
+        if(matrizTabla[i][j] === 1){
+        celda.style.backgroundColor = "black";
+        }else{
+        celda.style.backgroundColor = "yellow"
+        }
+        fila.appendChild(celda);
     }
 
-    tabla.appendChild(fila); // Agrega la fila a la tabla
+    tabla.appendChild(fila);
 }
 
 }
