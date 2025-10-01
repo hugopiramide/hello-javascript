@@ -67,11 +67,13 @@ for (let i = 0; i < filas; i++) {
     const fila = document.createElement("tr");
     for (let j = 0; j < columnas; j++) {
         const celda = document.createElement("td");
+        //celda.setAttribute('id',i+"_"+j);
         if(matrizTabla[i][j] === 1){
-        celda.style.backgroundColor = "black";
-        }else{
         celda.style.backgroundColor = "yellow"
+        }else{
+        celda.style.backgroundColor = "black";
         }
+        celda.addEventListener('click', () => accionClick(celda,i,j, matrizTabla));
         fila.appendChild(celda);
     }
 
@@ -130,4 +132,17 @@ function generarContadorIntentos(){
     intentos.innerText = '';
     contadorIntentos++;
     intentos.innerText = contadorIntentos;
+}
+
+function accionClick(celda,i,j,tabla){
+    let num = tabla[i][j];
+    if(num == 1){
+        celda.style.backgroundColor = 'black';
+        num = 0;
+    }else{
+        celda.style.backgroundColor = 'yellow';
+        num = 1;
+    }
+    tabla[i][j] = num;
+    console.log(tabla);
 }
