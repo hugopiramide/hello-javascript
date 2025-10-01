@@ -144,5 +144,8 @@ function accionClick(celda,i,j,tabla){
         num = 1;
     }
     tabla[i][j] = num;
+
+    intentos.innerText = contadorIntentos++;
     console.log(tabla);
+    console.log(contadorIntentos);
 }
