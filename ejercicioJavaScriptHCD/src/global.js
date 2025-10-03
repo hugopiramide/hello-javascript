@@ -21,19 +21,21 @@ dificultadPersonalizado.addEventListener('click', () => setDificultad(0, 0, 0, f
 
 btnSeleccionar.addEventListener('click',(event) => {
     event.preventDefault();
+    detenerCronometro();
+    contador(0);
     juego();
 })
 
 const juego = () => {
     const matrizTabla = new Array();
     
+    contadorIntentos = 0; horas = 0, minutos = 0, segundos = 0;
     let columna = parseInt(document.getElementById('columnas').value);
     let fila = parseInt(document.getElementById('filas').value);
     let luces = parseInt(document.getElementById('luces').value);
     
     if(columna * fila >= luces){
-    generarTablero(matrizTabla,columna,fila,luces);
-    generarCronometro();
+        generarTablero(matrizTabla,columna,fila,luces);
     }
 }
 
@@ -67,7 +69,6 @@ for (let i = 0; i < filas; i++) {
     const fila = document.createElement("tr");
     for (let j = 0; j < columnas; j++) {
         const celda = document.createElement("td");
-        //celda.setAttribute('id',i+"_"+j);
         if(matrizTabla[i][j] === 1){
         celda.style.backgroundColor = "yellow"
         }else{
@@ -116,25 +117,40 @@ function contar() {
     actualizarDisplay();
 }
 
-function generarCronometro(){
+function generarCronometro(corriendo = true){
     if(corriendo == true){
         clearInterval(intervalo)
         horas = 0;
         minutos = 0;
         segundos = 0;
-        corriendo = false;
     }
     intervalo = setInterval(contar, 1000);
     corriendo = true;
 }
 
-function generarContadorIntentos(){
+function detenerCronometro() {
+    clearInterval(intervalo);
+    tmpTranscurrido.innerHTML = '00:00:00';   
+}
+
+function contador(start = null){
+    if(start != null){
+    contadorIntentos = start;
+    intentos.value = contadorIntentos;
+    intentos.innerText = contadorIntentos;
+    }else{
     intentos.innerText = '';
     contadorIntentos++;
+    intentos.value = contadorIntentos;
     intentos.innerText = contadorIntentos;
+    }
 }
 
 function accionClick(celda,i,j,tabla){
+    contador();
+    if(intentos.value <= 1){
+        generarCronometro();
+    }
     let num = tabla[i][j];
     if(num == 1){
         celda.style.backgroundColor = 'black';
@@ -144,8 +160,6 @@ function accionClick(celda,i,j,tabla){
         num = 1;
     }
     tabla[i][j] = num;
-
-    intentos.innerText = contadorIntentos++;
     console.log(tabla);
     console.log(contadorIntentos);
 }
