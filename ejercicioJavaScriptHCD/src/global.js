@@ -8,11 +8,12 @@ const dificultadPersonalizado = document.getElementById('personalizado');
 const btnSeleccionar = document.getElementById('btnSeleccionar');
 const tmpTranscurrido = document.getElementById('tmpTranscurrido');
 const intentos = document.getElementById('intentos');
+const INTERVALO_CRONOMETRO_MS = 1000;
 
-let horas = 0, minutos = 0, segundos = 0;
-let intervalo = null;
-let corriendo = false;
-let contadorIntentos = 0;
+let horas;
+let minutos;
+let segundos;
+let intervalo;
 
 dificultadFacil.addEventListener('click', () => setDificultad(5, 6, 10));
 dificultadMedio.addEventListener('click', () => setDificultad(6, 6, 6));
@@ -21,14 +22,14 @@ dificultadPersonalizado.addEventListener('click', () => setDificultad(0, 0, 0, f
 
 btnSeleccionar.addEventListener('click',(event) => {
     event.preventDefault();
-    detenerCronometro();
-    contador(0);
-    juego();
+    iniciarJuego();
 })
 
-const juego = () => {
+const iniciarJuego = () => {
+    reestablecerCronometro();
+    actualizarContador(0);
+
     const matrizTabla = new Array();
-    
     contadorIntentos = 0; horas = 0, minutos = 0, segundos = 0;
     let columna = parseInt(document.getElementById('columnas').value);
     let fila = parseInt(document.getElementById('filas').value);
@@ -63,18 +64,23 @@ const generarLuces = (matriz,luces,columna,fila) => {
 const contruirTableroHTML = (matrizTabla, luces, columnas, filas) => {
 
     const tabla = document.getElementById("mainTable");
+
     tabla.innerHTML = "";
     console.log(matrizTabla);
+
 for (let i = 0; i < filas; i++) {
     const fila = document.createElement("tr");
     for (let j = 0; j < columnas; j++) {
         const celda = document.createElement("td");
+        celda.id = i + "_" + j;
+
         if(matrizTabla[i][j] === 1){
         celda.style.backgroundColor = "yellow"
         }else{
         celda.style.backgroundColor = "black";
         }
-        celda.addEventListener('click', () => accionClick(celda,i,j, matrizTabla));
+
+        celda.addEventListener('click', () => accionCeldaClick(celda,i,j, matrizTabla));
         fila.appendChild(celda);
     }
 
@@ -97,7 +103,7 @@ function getRandomArbitrary(min, max) {
 }
 
 
-function actualizarDisplay() {
+function actualizarDisplayCronometro() {
     let h = horas < 10 ? "0" + horas : horas;
     let m = minutos < 10 ? "0" + minutos : minutos;
     let s = segundos < 10 ? "0" + segundos : segundos;
@@ -114,26 +120,22 @@ function contar() {
     minutos = 0;
     horas++;
     }
-    actualizarDisplay();
+    actualizarDisplayCronometro();
 }
 
-function generarCronometro(corriendo = true){
-    if(corriendo == true){
-        clearInterval(intervalo)
-        horas = 0;
-        minutos = 0;
-        segundos = 0;
-    }
-    intervalo = setInterval(contar, 1000);
-    corriendo = true;
+function generarCronometro(){
+    horas = 0;
+    minutos = 0;
+    segundos = 0;
+    intervalo = setInterval(contar, INTERVALO_CRONOMETRO_MS);
 }
 
-function detenerCronometro() {
+function reestablecerCronometro() {
     clearInterval(intervalo);
-    tmpTranscurrido.innerHTML = '00:00:00';   
+    tmpTranscurrido.innerHTML = '00:00:00';
 }
 
-function contador(start = null){
+function actualizarContador(start = null){
     if(start != null){
     contadorIntentos = start;
     intentos.value = contadorIntentos;
@@ -146,20 +148,46 @@ function contador(start = null){
     }
 }
 
-function accionClick(celda,i,j,tabla){
-    contador();
+function accionCeldaClick(celda,i,j,tabla){
+    actualizarContador();
     if(intentos.value <= 1){
         generarCronometro();
     }
-    let num = tabla[i][j];
-    if(num == 1){
-        celda.style.backgroundColor = 'black';
-        num = 0;
-    }else{
-        celda.style.backgroundColor = 'yellow';
-        num = 1;
-    }
-    tabla[i][j] = num;
+    encenderApagarLuces(tabla,i,j,celda);
+
     console.log(tabla);
     console.log(contadorIntentos);
+}
+
+function encenderApagarLuces(tabla, i, j, celda) {
+
+    function toggleCelda(x, y) {
+        if (tabla[x] && tabla[x][y] !== undefined) {
+            let celdaAdyacente = document.getElementById(x + "_" + y);
+            if (tabla[x][y] === 1) {
+                celdaAdyacente.style.backgroundColor = 'black';
+                tabla[x][y] = 0;
+            } else {
+                celdaAdyacente.style.backgroundColor = 'yellow';
+                tabla[x][y] = 1;
+            }
+        }
+    }
+
+    if (tabla[i][j] === 1) {
+        celda.style.backgroundColor = 'black';
+        tabla[i][j] = 0;
+    } else {
+        celda.style.backgroundColor = 'yellow';
+        tabla[i][j] = 1;
+    }
+
+    toggleCelda(i - 1, j);
+    toggleCelda(i + 1, j); 
+    toggleCelda(i, j - 1);
+    toggleCelda(i, j + 1);
+    toggleCelda(i - 1, j - 1);
+    toggleCelda(i + 1, j - 1);
+    toggleCelda(i - 1, j + 1);
+    toggleCelda(i + 1, j + 1);
 }
