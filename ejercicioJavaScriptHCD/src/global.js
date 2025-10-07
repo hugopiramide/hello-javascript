@@ -1,6 +1,6 @@
-const columnas = document.getElementById('columnas');
-const filas = document.getElementById('filas');
-const luces = document.getElementById('luces');
+const columnasId = document.getElementById('columnas');
+const filasId = document.getElementById('filas');
+const lucesId = document.getElementById('luces');
 const dificultadFacil = document.getElementById('facil');
 const dificultadMedio = document.getElementById('medio');
 const dificultadDificil = document.getElementById('dificil');
@@ -8,17 +8,31 @@ const dificultadPersonalizado = document.getElementById('personalizado');
 const btnSeleccionar = document.getElementById('btnSeleccionar');
 const tmpTranscurrido = document.getElementById('tmpTranscurrido');
 const intentos = document.getElementById('intentos');
+const tablaHTML = document.getElementById("mainTable");
 const INTERVALO_CRONOMETRO_MS = 1000;
 
+let matrizTabla;
 let horas;
 let minutos;
 let segundos;
 let intervalo;
+let columna;
+let fila;
+let luces;
 
 dificultadFacil.addEventListener('click', () => setDificultad(5, 6, 10));
 dificultadMedio.addEventListener('click', () => setDificultad(6, 6, 6));
 dificultadDificil.addEventListener('click', () => setDificultad(10, 10, 20));
 dificultadPersonalizado.addEventListener('click', () => setDificultad(0, 0, 0, false));
+
+function setDificultad(filasVal = undefined, columnasVal = undefined, lucesVal = undefined, disabled = true) {
+    filasId.disabled = disabled;
+    filasId.value = filasVal;
+    columnasId.disabled = disabled;
+    columnasId.value = columnasVal;
+    lucesId.disabled = disabled;
+    lucesId.value = lucesVal;
+}
 
 btnSeleccionar.addEventListener('click',(event) => {
     event.preventDefault();
@@ -26,76 +40,70 @@ btnSeleccionar.addEventListener('click',(event) => {
 })
 
 const iniciarJuego = () => {
-    reestablecerCronometro();
-    actualizarContador(0);
 
-    const matrizTabla = new Array();
-    contadorIntentos = 0; horas = 0, minutos = 0, segundos = 0;
-    let columna = parseInt(document.getElementById('columnas').value);
-    let fila = parseInt(document.getElementById('filas').value);
-    let luces = parseInt(document.getElementById('luces').value);
+    matrizTabla = new Array();
+    contadorIntentos = 0; 
+    horas = 0,
+     minutos = 0, 
+     segundos = 0;
+    columna = parseInt(columnasId.value);
+    fila = parseInt(filasId.value);
+    luces = parseInt(lucesId.value);
     
-    if(columna * fila >= luces){
-        generarTablero(matrizTabla,columna,fila,luces);
+    if(comprobarRequisitosPrograma()){
+
+        reestablecerCronometro();
+        actualizarContador(0);
+        generarTablero();
+        generarLuces();
+        contruirTableroHTML();
+
     }
 }
 
-const generarTablero = (matrizTabla,columna,fila,luces) => {
-
+const generarTablero = () => {
     for (let i = 0; i < fila; i++) {
         matrizTabla[i] = new Array(columna).fill(0);
     }
-    generarLuces(matrizTabla, luces, columna, fila);
 }
 
-const generarLuces = (matriz,luces,columna,fila) => {
+const generarLuces = () => {
+
     let luz = 0;
+    let row, col;
+
     while(luz < luces) {
-        let row = getRandomArbitrary(0, fila); 
-        let col = getRandomArbitrary(0, columna); 
-        if(matriz[row][col] == 0){
-            matriz[row][col] = 1;
+        row = getRandomArbitrary(0, fila); 
+        col = getRandomArbitrary(0, columna); 
+        if(matrizTabla[row][col] == 0){
+            matrizTabla[row][col] = 1;
             luz++;
         }
     }
-    contruirTableroHTML(matriz, luces, columna, fila);
 }
 
-const contruirTableroHTML = (matrizTabla, luces, columnas, filas) => {
+const contruirTableroHTML = () => {
 
-    const tabla = document.getElementById("mainTable");
-
-    tabla.innerHTML = "";
+    tablaHTML.innerHTML = "";
     console.log(matrizTabla);
 
-for (let i = 0; i < filas; i++) {
-    const fila = document.createElement("tr");
-    for (let j = 0; j < columnas; j++) {
-        const celda = document.createElement("td");
-        celda.id = i + "_" + j;
+    for (let i = 0; i < fila; i++) {
+        let filaTabla = document.createElement("tr");
 
-        if(matrizTabla[i][j] === 1){
-        celda.style.backgroundColor = "yellow"
-        }else{
-        celda.style.backgroundColor = "black";
+        for (let j = 0; j < columna; j++) {
+            let celdaTabla = document.createElement("td");
+            celdaTabla.id = i + "_" + j;
+            if(matrizTabla[i][j] === 1){
+            celdaTabla.style.backgroundColor = "yellow"
+            }else{
+            celdaTabla.style.backgroundColor = "black";
+            }
+            celdaTabla.addEventListener('click', () => accionCeldaClick(celdaTabla,i,j, matrizTabla));
+            filaTabla.appendChild(celdaTabla);
         }
 
-        celda.addEventListener('click', () => accionCeldaClick(celda,i,j, matrizTabla));
-        fila.appendChild(celda);
+        tablaHTML.appendChild(filaTabla);
     }
-
-    tabla.appendChild(fila);
-}
-
-}
-
-function setDificultad(filasVal = undefined, columnasVal = undefined, lucesVal = undefined, disabled = true) {
-    filas.disabled = disabled;
-    filas.value = filasVal;
-    columnas.disabled = disabled;
-    columnas.value = columnasVal;
-    luces.disabled = disabled;
-    luces.value = lucesVal;
 }
 
 function getRandomArbitrary(min, max) {
@@ -190,4 +198,10 @@ function encenderApagarLuces(tabla, i, j, celda) {
     toggleCelda(i + 1, j - 1);
     toggleCelda(i - 1, j + 1);
     toggleCelda(i + 1, j + 1);
+}
+
+const comprobarRequisitosPrograma = () => {
+    if (columna * fila < luces){tablaHTML.innerText = 'Tabla no generarda, indique bien la cantidad de luces en el tablero';return false;}
+    if (isNaN(columna) || isNaN(fila) || isNaN(luces)) {tablaHTML.innerText = 'Tabla no generada, instancia de manera correcta los valores fila/columna/luces';return false;}
+    return true;
 }
