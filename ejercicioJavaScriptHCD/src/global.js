@@ -168,7 +168,7 @@ function accionCeldaClick(celda,i,j,tabla){
     }
     encenderApagarLuces(tabla,i,j,celda);
     if(comprobarGanador()){
-        ganadorId.innerHTML += 'Enhorabuena, Has conseguido encender todas la luces!'; 
+        ganadorId.innerHTML += 'Enorabuena, has conseguido encender todas la luces!'; 
         detenerCronometro();
     }
 
