@@ -1,3 +1,4 @@
+const ganadorId = document.getElementById('ganador');
 const columnasId = document.getElementById('columnas');
 const filasId = document.getElementById('filas');
 const lucesId = document.getElementById('luces');
@@ -143,6 +144,10 @@ function reestablecerCronometro() {
     tmpTranscurrido.innerHTML = '00:00:00';
 }
 
+function detenerCronometro(){
+    clearInterval(intervalo);
+}
+
 function actualizarContador(start = null){
     if(start != null){
     contadorIntentos = start;
@@ -162,6 +167,10 @@ function accionCeldaClick(celda,i,j,tabla){
         generarCronometro();
     }
     encenderApagarLuces(tabla,i,j,celda);
+    if(comprobarGanador()){
+        ganadorId.innerHTML += 'Enhorabuena, Has conseguido encender todas la luces!'; 
+        detenerCronometro();
+    }
 
     console.log(tabla);
     console.log(contadorIntentos);
@@ -204,4 +213,8 @@ const comprobarRequisitosPrograma = () => {
     if (columna * fila < luces){tablaHTML.innerText = 'Tabla no generarda, indique bien la cantidad de luces en el tablero';return false;}
     if (isNaN(columna) || isNaN(fila) || isNaN(luces)) {tablaHTML.innerText = 'Tabla no generada, instancia de manera correcta los valores fila/columna/luces';return false;}
     return true;
+}
+
+const comprobarGanador = () => {
+    return matrizTabla.flat().every(elemento => elemento === 1);
 }
