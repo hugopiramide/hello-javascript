@@ -1,4 +1,4 @@
-# To-Do List Source Code(opens in a new tab)
+# To-Do List Source Code
 
 ## Key concepts covered:
 
