@@ -3,10 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Speech Detection</title>
-  <link rel="icon" href="https://fav.farm/🔥" />
+  <link rel="stylesheet" href="./css/global.css" type="text/css">
 </head>
 <body>
-  <div class="words" contenteditable></div>
+  <div id="transcription-result" class="words" contenteditable></div>
+
+  <button id="recording-button" class="btn-record">Record</button>
+  <span id="error-message">
+    Your browser does not support speech recognition.
+  </span>
+  
 <script type="text/javascript" src="./js/global.js"></script>
 </body>
 </html>
