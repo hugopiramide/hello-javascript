@@ -10,7 +10,6 @@
       rel="stylesheet" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/styles.css" />
-    <script src="js/script.js" defer></script>
   </head>
 
   <body>
@@ -26,11 +25,12 @@
         <label for="letter">Type one letter:</label>
         <input type="text" id="letter" name="letter" class="letter" />
         <div class="form-element button-element">
-          <button class="guess">Guess!</button>
+          <button id="guess" class="guess">Guess!</button>
         </div>
       </form>
-      <button class="play-again hide">Play Again!</button>
+      <button id="play-again" class="play-again hide">Play Again!</button>
     </div>
+    <script src="js/global.js" defer></script>
   </body>
 
 </html>
