@@ -19,11 +19,11 @@
       </h1>
       <p class="message"></p>
       <p id="word-in-progress" class="word-in-progress"></p>
-      <p class="remaining">You have <span>8 guesses</span> remaining.</p>
+      <p id="remaining" class="remaining">You have <span id="attempts">8 guesses</span> remaining.</p>
       <ul id="guessed-letters" class="guessed-letters"></ul>
       <form class="guess-form">
-        <label for="letter">Type one letter:</label>
-        <input type="text" id="letter" name="letter" class="letter" />
+        <label id="letter-label" class="hide" for="letter">Type one letter:</label>
+        <input type="text" id="letter-input" name="letter" class="letter hide" maxlength="1"/>
         <div class="form-element button-element">
           <button id="guess" class="guess hide">Guess!</button>
         </div>
