@@ -24,8 +24,7 @@ const attemptsId = document.getElementById('attempts');
 let word = '';
 let displayWords = [];
 let guessWord = [];
-let guessedLetters = 0;
-let attempts = 8;
+let attempts;
 
 btnStartGameId.addEventListener('click', (event) => {
     event.preventDefault();
@@ -41,8 +40,10 @@ const startGame = () => {
     word = keyWords[generateRandomNumber()];
     guessWord = word.split("");
     displayWords = Array(word.length).fill("_");
+    attempts = 8;
     refreshDisplay();
     
+    guessedLettersId.innerText = '';
     letterLabelId.classList.remove('hide');
     letterInputId.classList.remove('hide');
     btnGuessId.classList.remove('hide');
@@ -65,7 +66,7 @@ const guessLetter = () => {
             countAttempt = false;
         }
     }
-    if(countAttempt){
+    if(countAttempt && letterInputId.value != ''){
         attempts--;   
         if(attempts <= 0){
             endGame();
@@ -77,7 +78,18 @@ const guessLetter = () => {
 }
 
 const endGame = () => {
-    
+    if(winner()){
+        guessedLettersId.innerText = "CONGRATULATIONS YOU WON";
+        return;
+    }
+    guessedLettersId.innerText = "NOT TODAY, SORRY";
+
+    btnGuessId.classList.add('hide');
+    btnStartGameId.classList.remove('hide');
+}
+
+const winner = () => {
+
 }
 
 const generateRandomNumber = () =>  {
@@ -91,4 +103,5 @@ const refreshDisplay = () => {
     }else{
         attemptsId.innerText = attempts + " guesses";
     }
+    letterInputId.value = '';
 }
