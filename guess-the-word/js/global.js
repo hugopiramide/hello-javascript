@@ -41,13 +41,14 @@ const startGame = () => {
     guessWord = word.split("");
     displayWord = Array(word.length).fill("_");
     attempts = 8;
-    refreshDisplay();
     
     guessedLettersId.innerText = '';
     letterLabelId.classList.remove('hide');
     letterInputId.classList.remove('hide');
     btnGuessId.classList.remove('hide');
     btnStartGameId.classList.add('hide');
+
+    refreshDisplay();
 }
 
 const guessLetter = () => {
@@ -116,4 +117,6 @@ const refreshDisplay = () => {
     if(winner()){
         endGame();
     }
+
+    letterInputId.focus();
 }
