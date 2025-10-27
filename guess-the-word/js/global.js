@@ -22,7 +22,7 @@ const remainingId = document.getElementById('remaining');
 const attemptsId = document.getElementById('attempts');
 
 let word = '';
-let displayWords = [];
+let displayWord = [];
 let guessWord = [];
 let attempts;
 
@@ -39,7 +39,7 @@ btnGuessId.addEventListener('click', (event) => {
 const startGame = () => {
     word = keyWords[generateRandomNumber()];
     guessWord = word.split("");
-    displayWords = Array(word.length).fill("_");
+    displayWord = Array(word.length).fill("_");
     attempts = 8;
     refreshDisplay();
     
@@ -62,13 +62,14 @@ const guessLetter = () => {
     for(i = 0; i < guessWord.length; i++){
         if(guessWord[i] == letterInputId.value){
             guessedLettersId.innerText = "You got it !!";
-            displayWords[i] = letterInputId.value;
+            displayWord[i] = letterInputId.value;
             countAttempt = false;
         }
     }
     if(countAttempt && letterInputId.value != ''){
         attempts--;   
         if(attempts <= 0){
+            guessedLettersId.innerText = "NOT TODAY, SORRY";
             endGame();
             return;
         }
@@ -78,18 +79,25 @@ const guessLetter = () => {
 }
 
 const endGame = () => {
-    if(winner()){
-        guessedLettersId.innerText = "CONGRATULATIONS YOU WON";
-        return;
-    }
-    guessedLettersId.innerText = "NOT TODAY, SORRY";
-
+    letterInputId.classList.add('hide');
     btnGuessId.classList.add('hide');
     btnStartGameId.classList.remove('hide');
 }
 
 const winner = () => {
 
+    const equals = displayWord.length === guessWord.length && displayWord.every((val, i) => val === guessWord[i]);
+        
+    if(equals){
+        confetti({ 
+            particleCount: 200,
+            spread: 100,
+            origin: { y: 0.6 }
+        });
+        guessedLettersId.innerText = "CONGRATULATIONS, YOU WON";
+        return true;
+    }
+    return false;
 }
 
 const generateRandomNumber = () =>  {
@@ -97,11 +105,15 @@ const generateRandomNumber = () =>  {
 }
 
 const refreshDisplay = () => {
-    wordInProgressId.innerText = displayWords.join(" ");
+    wordInProgressId.innerText = displayWord.join(" ");
     if(attempts == 1){
         attemptsId.innerText = attempts +  " guess";
     }else{
         attemptsId.innerText = attempts + " guesses";
     }
     letterInputId.value = '';
+    
+    if(winner()){
+        endGame();
+    }
 }
