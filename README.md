@@ -1,4 +1,4 @@
-# JavaScript Mini Projects & Exercises
+# Vanilla JavaScript Mini Projects & Exercises
 
 This repository contains a collection of small JavaScript projects and exercises. These were built both during class sessions and through personal practice to deepen my understanding of JavaScript fundamentals and DOM manipulation.
 
