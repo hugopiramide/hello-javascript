@@ -53,6 +53,7 @@ const iniciarJuego = () => {
     
     if(comprobarRequisitosPrograma()){
 
+        eliminarTextoVictoria();
         reestablecerCronometro();
         actualizarContador(0);
         generarTablero();
@@ -99,12 +100,33 @@ const contruirTableroHTML = () => {
             }else{
             celdaTabla.style.backgroundColor = "black";
             }
-            celdaTabla.addEventListener('click', () => accionCeldaClick(celdaTabla,i,j, matrizTabla));
+            const manejadorClick = () => accionCeldaClick(celdaTabla,i,j, matrizTabla);
+            celdaTabla._manejadorClick = manejadorClick;
+            celdaTabla.addEventListener('click', manejadorClick);
+
             filaTabla.appendChild(celdaTabla);
         }
 
         tablaHTML.appendChild(filaTabla);
     }
+}
+
+const deshabilitarCeldas = () => {
+    for (let i = 0; i < fila; i++) {
+        for (let j = 0; j < columna; j++) {
+            const celdaTabla = document.getElementById(i + "_" + j);
+            
+            if (celdaTabla && celdaTabla._manejadorClick) {
+                celdaTabla.removeEventListener('click', celdaTabla._manejadorClick);
+
+                delete celdaTabla._manejadorClick; 
+            }
+        }
+    }
+}
+
+const eliminarTextoVictoria = () => {
+    ganadorId.innerHTML = ''; 
 }
 
 function getRandomArbitrary(min, max) {
@@ -117,7 +139,7 @@ function actualizarDisplayCronometro() {
     let m = minutos < 10 ? "0" + minutos : minutos;
     let s = segundos < 10 ? "0" + segundos : segundos;
     tmpTranscurrido.innerText = `${h}:${m}:${s}`;
-;}
+}
 
 function contar() {
     segundos++;
@@ -170,10 +192,8 @@ function accionCeldaClick(celda,i,j,tabla){
     if(comprobarGanador()){
         ganadorId.innerHTML += 'Enorabuena, has conseguido encender todas la luces!'; 
         detenerCronometro();
+        deshabilitarCeldas();
     }
-
-    console.log(tabla);
-    console.log(contadorIntentos);
 }
 
 function encenderApagarLuces(tabla, i, j, celda) {
@@ -203,10 +223,6 @@ function encenderApagarLuces(tabla, i, j, celda) {
     toggleCelda(i + 1, j); 
     toggleCelda(i, j - 1);
     toggleCelda(i, j + 1);
-    toggleCelda(i - 1, j - 1);
-    toggleCelda(i + 1, j - 1);
-    toggleCelda(i - 1, j + 1);
-    toggleCelda(i + 1, j + 1);
 }
 
 const comprobarRequisitosPrograma = () => {
