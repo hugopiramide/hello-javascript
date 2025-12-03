@@ -226,8 +226,8 @@ function encenderApagarLuces(tabla, i, j, celda) {
 }
 
 const comprobarRequisitosPrograma = () => {
-    if (columna * fila < luces){tablaHTML.innerText = 'Tabla no generarda, indique bien la cantidad de luces en el tablero';return false;}
-    if (isNaN(columna) || isNaN(fila) || isNaN(luces)) {tablaHTML.innerText = 'Tabla no generada, instancia de manera correcta los valores fila/columna/luces';return false;}
+    if (columna * fila <= luces){tablaHTML.innerText = 'Tabla no generada. Indique bien la cantidad de luces en el tablero';return false;}
+    if (isNaN(columna) || isNaN(fila) || isNaN(luces)) {tablaHTML.innerText = 'Tabla no generada. Instancia de manera correcta los valores fila/columna/luces';return false;}
     return true;
 }
 
